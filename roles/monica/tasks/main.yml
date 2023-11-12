@@ -1,0 +1,39 @@
+---
+- name: Docker container
+  community.docker.docker_container:
+    name: monica
+    image: ghcr.io/monicahq/monica-next:main
+    state: started
+    recreate: true
+    pull: true
+    restart_policy: unless-stopped
+    published_ports:
+      - '127.0.0.1:8046:80'
+    volumes:
+      - monica_storage:/var/www/html/storage
+    env:
+      APP_URL: "https://monica.evandoes.dev"
+      APP_ENV: "production"
+      APP_TRUSTED_PROXIES: "*"
+      TELEGRAM_BOT_TOKEN: "{{ lookup('community.general.onepassword', 'monica', field='telegram_bot_token', vault='Personal Servers') | string }}"
+      TELEGRAM_BOT_URL: "{{ lookup('community.general.onepassword', 'monica', field='telegram_bot_url', vault='Personal Servers') | string }}"
+      TELEGRAM_BOT_WEBHOOK_URL: "{{ lookup('community.general.onepassword', 'monica', field='telegram_bot_webhook_url', vault='Personal Servers') | string }}"
+      DEFAULT_STORAGE_LIMIT: '10000'
+      APP_KEY: "{{ lookup('community.general.onepassword', 'monica', field='app_key', vault='Personal Servers') | string }}"
+      DB_CONNECTION: "mysql"
+      DB_HOST: "172.17.0.1"
+      DB_PORT: "3306"
+      DB_DATABASE: "monica"
+      DB_USERNAME: "{{ lookup('community.general.onepassword', 'monica', field='db_username', vault='Personal Servers') | string }}"
+      DB_PASSWORD: "{{ lookup('community.general.onepassword', 'monica', field='db_password', vault='Personal Servers') | string }}"
+      UPLOADCARE_PUBLIC_KEY: "{{ lookup('community.general.onepassword', 'monica', field='uploadcare_public_key', vault='Personal Servers') | string }}"
+      UPLOADCARE_PRIVATE_KEY: "{{ lookup('community.general.onepassword', 'monica', field='uploadcare_private_key', vault='Personal Servers') | string }}"
+      LOCATION_IQ_API_KEY: "{{ lookup('community.general.onepassword', 'monica', field='location_iq_api_key', vault='Personal Servers') | string }}"
+
+- name: Caddy config
+  become: true
+  ansible.builtin.blockinfile:
+    backup: true
+    path: '/etc/caddy/Caddyfile'
+    block: "{{ lookup('template', 'Caddyfile_part.j2') }}"
+    marker: "# {mark} ANSIBLE MANAGED BLOCK (monica)"

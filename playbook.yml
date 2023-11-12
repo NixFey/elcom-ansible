@@ -1,0 +1,8 @@
+---
+- name: Servers
+  hosts: servers
+  become: yes
+  roles:
+    - docker
+    - monica
+    - caddy_restart

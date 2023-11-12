@@ -1,0 +1,10 @@
+---
+- name: Check caddy config validity
+  command: /usr/bin/caddy validate -c /etc/caddy/Caddyfile
+
+- name: Restart Caddy service
+  become: true
+  service:
+    name: caddy
+    state: restarted
+  
