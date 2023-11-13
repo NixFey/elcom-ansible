@@ -1,0 +1,6 @@
+---
+container_name: tracker
+web_port: 8010
+hostname: tracker.evandoes.dev
+connectionstrings__defaultconnection: "{{ lookup('community.general.onepassword', 'tracker', field='connectionstrings__defaultconnection', vault='Personal Servers') | string }}"
+telegram__accesstoken: "{{ lookup('community.general.onepassword', 'tracker', field='telegram__accesstoken', vault='Personal Servers') | string }}"

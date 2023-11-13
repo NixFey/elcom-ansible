@@ -5,4 +5,5 @@
   roles:
     - docker
     - monica
+    - tracker
     - caddy_restart

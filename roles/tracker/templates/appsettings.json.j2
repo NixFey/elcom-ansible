@@ -1,0 +1,17 @@
+{
+  "DbProvider": "MySQL",
+  "ConnectionStrings": {
+    "DefaultConnection": {{ connectionstrings__defaultconnection | to_json }}
+  },
+  "Logging": {
+    "LogLevel": {
+      "Default": "Information",
+      "Microsoft": "Warning",
+      "Microsoft.Hosting.Lifetime": "Information"
+    }
+  },
+  "BaseUrl": "https://{{hostname}}",
+  "Telegram": {
+    "AccessToken": {{ telegram__accesstoken | to_json }}
+  }
+}

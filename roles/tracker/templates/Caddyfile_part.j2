@@ -1,0 +1,4 @@
+{{ hostname }} {
+	import common
+	reverse_proxy 127.0.0.1:{{ web_port }} # Docker container name: {{ container_name }}
+}

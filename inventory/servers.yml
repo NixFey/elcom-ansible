@@ -2,4 +2,5 @@
 servers:
   hosts:
     ps01.evandoes.dev:
-      ansible_user: "{{ lookup('community.general.onepassword', 'ansible_user', field='username', vault='Personal Servers') | string }}"
+      ansible_user: "{{ lookup('community.general.onepassword', 'ansible_become', field='username', vault='Personal Servers') | string }}"
+      ansible_become_password: "{{ lookup('community.general.onepassword', 'ansible_become', field='password', vault='Personal Servers') | string }}"
