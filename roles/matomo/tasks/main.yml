@@ -1,0 +1,25 @@
+---
+- name: Docker container
+  community.docker.docker_container:
+    name: "{{ container_name }}"
+    image: matomo:5
+    state: started
+    recreate: true
+    pull: true
+    restart_policy: unless-stopped
+    published_ports:
+      - '127.0.0.1:{{ web_port }}:80'
+    env:
+      MATOMO_DATABASE_HOST: '{{ database_host }}'
+      MATOMO_DATABASE_ADAPTER: 'mysql'
+      MATOMO_DATABASE_USERNAME: '{{ database_username }}'
+      MATOMO_DATABASE_PASSWORD: '{{ database_password }}'
+      MATOMO_DATABASE_DBNAME: '{{ database_dbname }}'
+
+- name: Caddy config
+  become: true
+  ansible.builtin.blockinfile:
+    backup: true
+    path: '/etc/caddy/Caddyfile'
+    block: "{{ lookup('template', 'Caddyfile_part.j2') }}"
+    marker: "# {mark} ANSIBLE MANAGED BLOCK ({{ container_name }})"
