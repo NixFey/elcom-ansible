@@ -1,0 +1,4 @@
+---
+container_name: domain-info-server
+web_port: 3333
+hostnames: ['di-svr.nixdev.cc']

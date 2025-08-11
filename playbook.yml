@@ -5,5 +5,10 @@
   roles:
     - docker
     - monica
+    - matomo
     - tracker
+    - git
+    - opengist
+    - ghost
+    - domain-info-server
     - caddy_restart

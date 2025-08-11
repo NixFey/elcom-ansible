@@ -1,0 +1,29 @@
+---
+- name: Docker container
+  community.docker.docker_container:
+    name: "{{ container_name }}"
+    image: ghcr.io/thomiceli/opengist:1.10
+    state: started
+    recreate: true
+    pull: true
+    restart_policy: unless-stopped
+    published_ports:
+      - '127.0.0.1:{{ web_port }}:6157'
+    env:
+      USER_UID=1000
+      USER_GID=1000
+      OG_GITEA_CLIENT_KEY='{{ sso_clientkey }}'
+      OG_GITEA_SECRET='{{ sso_secret }}'
+      OG_GITEA_URL='{{ sso_url }}'
+    volumes:
+      - /var/www/{{ container_name }}/opengist:/opengist
+      - /etc/timezone:/etc/timezone:ro
+      - /etc/localtime:/etc/localtime:ro
+
+- name: Caddy config
+  become: true
+  ansible.builtin.blockinfile:
+    backup: true
+    path: '/etc/caddy/Caddyfile'
+    block: "{{ lookup('template', 'Caddyfile_part.j2') }}"
+    marker: "# {mark} ANSIBLE MANAGED BLOCK ({{ container_name }})"

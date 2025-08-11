@@ -1,0 +1,4 @@
+---
+container_name: ghost
+web_port: 8030
+hostnames: ['blog.starnix.dev']

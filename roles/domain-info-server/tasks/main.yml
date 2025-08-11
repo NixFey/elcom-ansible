@@ -1,0 +1,23 @@
+---
+- name: Docker container
+  community.docker.docker_container:
+    name: "{{ container_name }}"
+    image: ghcr.io/nixfey/domain-info:latest
+    state: started
+    recreate: true
+    pull: true
+    restart_policy: unless-stopped
+    published_ports:
+      - '127.0.0.1:{{ web_port }}:3333'
+    # network_mode: host
+    env:
+      VERBOSE=false
+      # SOURCE_IP=2604:a880:400:d0::1ad0:f001
+
+- name: Caddy config
+  become: true
+  ansible.builtin.blockinfile:
+    backup: true
+    path: '/etc/caddy/Caddyfile'
+    block: "{{ lookup('template', 'Caddyfile_part.j2') }}"
+    marker: "# {mark} ANSIBLE MANAGED BLOCK ({{ container_name }})"

@@ -1,7 +1,7 @@
 ---
 container_name: git
 web_port: 8070
-hostname: git.evandoes.dev
+hostnames: ['git.starnix.dev']
 database_host: "{{ lookup('community.general.onepassword', 'git', field='database_host', vault='Personal Servers') | string }}"
 database_username: "{{ lookup('community.general.onepassword', 'git', field='database_username', vault='Personal Servers') | string }}"
 database_password: "{{ lookup('community.general.onepassword', 'git', field='database_password', vault='Personal Servers') | string }}"

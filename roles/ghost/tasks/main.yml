@@ -1,0 +1,25 @@
+---
+- name: Docker container
+  community.docker.docker_container:
+    name: "{{ container_name }}"
+    image: ghost:5
+    state: started
+    recreate: true
+    pull: true
+    restart_policy: unless-stopped
+    published_ports:
+      - '127.0.0.1:{{ web_port }}:2368'
+    env:
+      database__client: sqlite3
+      database__connection__filename: /var/lib/ghost/content/ghost.db
+      url: "https://{{ hostnames[0] }}"
+    volumes:
+      - /var/www/{{ container_name }}/content:/var/lib/ghost/content
+
+- name: Caddy config
+  become: true
+  ansible.builtin.blockinfile:
+    backup: true
+    path: '/etc/caddy/Caddyfile'
+    block: "{{ lookup('template', 'Caddyfile_part.j2') }}"
+    marker: "# {mark} ANSIBLE MANAGED BLOCK ({{ container_name }})"

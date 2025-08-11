@@ -1,0 +1,7 @@
+---
+container_name: opengist
+web_port: 8072
+hostnames: ['snip.starnix.dev']
+sso_clientkey: "{{ lookup('community.general.onepassword', 'opengist', field='sso_clientkey', vault='Personal Servers') | string }}"
+sso_secret: "{{ lookup('community.general.onepassword', 'opengist', field='sso_secret', vault='Personal Servers') | string }}"
+sso_url: "{{ lookup('community.general.onepassword', 'opengist', field='sso_url', vault='Personal Servers') | string }}"
